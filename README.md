@@ -1,2 +1,5 @@
 # Ripen-app
-Repository for an app in progress - more description to come after first revision
+
+Time management app developed for android 5.0 and onwards
+
+For more information head over to the wiki, which will updated and developed with ongoing information

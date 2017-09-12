@@ -1,6 +1,7 @@
 package pfcaygill.ripen;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,4 +82,5 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
     public int getItemCount() {
         return listFruits.size();
     }
+
 }

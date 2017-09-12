@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 public class FruitClass {
 
+    private static final String FILE_FRUIT = "";
+
     private String Title;
     private DateTime LastPicked;
     private Long Interval;

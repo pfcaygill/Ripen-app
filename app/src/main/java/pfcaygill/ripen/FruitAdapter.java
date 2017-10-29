@@ -78,7 +78,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
         //IsRipe = fruit.getLastPicked().plus(fruit.getInterval()).isBeforeNow();
         int ripeness = calculateProgress(fruit.getLastPicked(),fruit.getInterval());
         progressBar.setProgress(ripeness);
-        String progressText = "Ripeness: " + ripeness;
+        String progressText = "Ripeness: " + ripeness + "%";
         information.setText(progressText);
     }
 

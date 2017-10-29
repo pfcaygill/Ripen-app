@@ -2,6 +2,7 @@ package pfcaygill.ripen;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -21,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //fix the toolbar
-
         RecyclerView rvFruit = (RecyclerView) findViewById(R.id.rvFruit);
 
         fruitList = (ArrayList<FruitClass>) FruitClass.loadFruitElements();
@@ -33,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         rvFruit.setAdapter(adapter);
         // Set layout manager to position the items
         rvFruit.setLayoutManager(new LinearLayoutManager(this));
+        //add dividers to the fruit
+        rvFruit.addItemDecoration(new DividerItemDecoration(rvFruit.getContext(),
+                DividerItemDecoration.HORIZONTAL));
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

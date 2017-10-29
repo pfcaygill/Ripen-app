@@ -58,6 +58,10 @@ public class FruitClass {
                 "Test_Fruit",
                 new DateTime(2017,9,29,12,0,0,0),
                 testDuration));
+        fruitFromMemory.add(new FruitClass(
+                "Test_Fruit_2_Electric_Bugaloo",
+                new DateTime(2017,9,29,12,0,0,0),
+                testDuration));
         //TODO: load non test content/ better test content
 
         return fruitFromMemory;

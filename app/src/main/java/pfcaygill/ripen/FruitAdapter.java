@@ -11,6 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,14 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 
         public TextView nameTextView;
         public ProgressBar fruitProgress;
+        public TextView infoTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             nameTextView = (TextView) itemView.findViewById(R.id.Fruit_title);
             fruitProgress = (ProgressBar) itemView.findViewById(R.id.Fruit_progress);
+            infoTextView = (TextView) itemView.findViewById(R.id.Fruit_progText);
         }
     }
 
@@ -66,21 +70,31 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
         // Get item views
         TextView textView = viewHolder.nameTextView;
         ProgressBar progressBar=viewHolder.fruitProgress;
+        TextView information = viewHolder.infoTextView;
         // Set item views based on your views and data model
         textView.setText(fruit.getTitle());
         // Calculate
         //For boolean use:
         //IsRipe = fruit.getLastPicked().plus(fruit.getInterval()).isBeforeNow();
-        DateTime current = DateTime.now();// needed for manual calculation
-        DateTime lastPicked = fruit.getLastPicked();
-        Long timeRipening = current.getMillis()-lastPicked.getMillis();
-        int ripeness =(int) (timeRipening/fruit.getInterval());
+        int ripeness = calculateProgress(fruit.getLastPicked(),fruit.getInterval());
         progressBar.setProgress(ripeness);
+        String progressText = "Ripeness: " + ripeness;
+        information.setText(progressText);
     }
 
     @Override
     public int getItemCount() {
         return listFruits.size();
     }
-
+    private int calculateProgress(DateTime lastPicked,Duration interval){
+        DateTime current = DateTime.now();// needed for manual calculation
+        Duration timeRipening = new Duration(lastPicked,current);
+        if( timeRipening.isLongerThan(interval)){
+            return 10;
+        }else{
+            Long ratio =
+                    interval.getStandardMinutes()/timeRipening.getStandardMinutes();
+            return (int)(100*ratio);
+        }
+    }
 }

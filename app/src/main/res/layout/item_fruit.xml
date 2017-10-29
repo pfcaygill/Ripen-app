@@ -3,22 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:orientation="horizontal">
     <TextView
         tools:text="hello world"
         android:id="@+id/Fruit_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
-
     <ProgressBar
         android:id="@+id/Fruit_progress"
-        style="?android:attr/progressBarStyle"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
-
+        android:indeterminate="false" />
+    <TextView
+        tools:text="Information"
+        android:id="@+id/Fruit_progText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="gravity"
+        android:gravity="right"/>
 </LinearLayout>

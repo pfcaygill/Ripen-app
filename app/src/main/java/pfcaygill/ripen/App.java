@@ -1,6 +1,7 @@
 package pfcaygill.ripen;
 
 import android.app.Application;
+import android.widget.Toolbar;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -14,7 +15,6 @@ public class App extends Application {
         super.onCreate();
         JodaTimeAndroid.init(this);
         //Check for a new file
-
 
 
     }

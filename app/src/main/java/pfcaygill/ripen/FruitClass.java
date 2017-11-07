@@ -2,6 +2,8 @@ package pfcaygill.ripen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.util.ArraySet;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
@@ -17,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by PFCaygill on 12/09/2017.
@@ -28,11 +31,13 @@ public class FruitClass {
     private String Title;
     private DateTime LastPicked;
     private Duration Interval;
+    private int Progress;
 
     public FruitClass(String DataTitle,DateTime DataLast,Duration DataInterval){
         Title=DataTitle;
         LastPicked=DataLast;
         Interval= DataInterval;
+        updateProgress();
     }
 
     public Duration getInterval() {
@@ -47,24 +52,59 @@ public class FruitClass {
         return LastPicked;
     }
 
+    public int getProgress(){return Progress;}
+    //Sets the current progress, also used for initialising
+    public void updateProgress(){
+        this.Progress = calculateProgress(this.LastPicked,this.Interval);
+    }
+    //static method to calculate the progress of ripening
+    public static int calculateProgress(DateTime lastPicked,Duration interval){
+        DateTime current = DateTime.now();// needed for manual calculation
+        Duration timeRipening = new Duration(lastPicked,current);
+        if( timeRipening.isLongerThan(interval)){
+            return 100;
+        }else{
+            Double ratio =//using double fixes the forced use of longs
+                    (10.0*timeRipening.getStandardHours())/
+                            (10.0*interval.getStandardHours());
+            return (int)(100*ratio);
+        }
+    }
+    /**
+     * Methods for parseing to and from string.
+     * */
+    public FruitClass(String fromString){
+        String[] data =  fromString.split(";");
+        Title = data[0];
+        LastPicked= DateTime.parse(data[1]);
+        Interval= Duration.parse(data[2]);
+        updateProgress();
+    }
+    public String toString(){
+        return Title +";"+
+        LastPicked.toString() +";"+
+        Interval.toString();
+    }
+
+    /**
+     * Old method used to provide test data to the recycler view.
+     * */
+    @Deprecated
     public static List<FruitClass> loadFruitElements(){
         ArrayList<FruitClass> fruitFromMemory = new ArrayList<FruitClass>();
+        //Duration should be one standard day
+        Duration testDuration = Duration.standardDays(1);
 
-        Duration testDuration = new Duration(
-                new DateTime(2004,12,25,0,0,0,0),
-                new DateTime(2004,12,26,0,0,0,0)
-        );//this should be one day, is there a better way to do this?
         fruitFromMemory.add(new FruitClass(
                 "Test_Fruit",
-                new DateTime(2017,9,29,12,0,0,0),
+                DateTime.now().minusHours(3),
                 testDuration));
         fruitFromMemory.add(new FruitClass(
                 "Test_Fruit_2_Electric_Bugaloo",
-                new DateTime(2017,9,29,12,0,0,0),
+                DateTime.now().minusHours(12),
                 testDuration));
         //TODO: load non test content/ better test content
 
         return fruitFromMemory;
     }
-
 }

@@ -1,5 +1,6 @@
 package pfcaygill.ripen;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT//duration
                 );
                 create_toast.show();*/
-               
+                Intent intent = new Intent(this, Create_Fruit.class);
+                startActivity(intent);
+
                 return true;
             case R.id.delete_fruit:
                 Toast delete_toast = Toast.makeText(

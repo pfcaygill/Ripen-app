@@ -10,4 +10,30 @@
     <string name="create_fruit_toast">PlaceHolder Create Text</string>
     <string name="delete_fruit_toast">PlaceHolder Delete Text</string>
     <string name="title_activity_create__fruit">Create_Fruit</string>
+
+    <string name="create_fruit_name_section_title">
+        Fruit Name
+    </string>
+    <string name="create_fruit_name_section_description">
+        eg. "Wash the car"
+    </string>
+
+    <string name="create_fruit_duration_section_title">
+        Duration
+    </string>
+    <string name="create_fruit_duration_section_description">
+        How long do you want the fruit to take to ripen? ie. How long until the event can happen again?
+    </string>
+    <string name="create_fruit_submit_button">
+        Done
+    </string>
+
+
+    <string-array name="dropdown_duration_selector">
+        <item>Hours</item>
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
+    </string-array>
 </resources>

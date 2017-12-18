@@ -3,6 +3,8 @@ package pfcaygill.ripen;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArraySet;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class ContentBroker {
 
     private Context context;
     private SharedPreferences sharedPref;
-    private Set<String> fruit_key_set;
+
 
     public ContentBroker(Context targetContext){
         this.context=targetContext;
@@ -24,18 +26,29 @@ public class ContentBroker {
                 context.getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE
         );
-        fruit_key_set = sharedPref.getStringSet(
-                context.getString(R.string.preference_fruit_list),
-                null
-        );
     }
     /*
     Methods for reading and loading data to shared preferences
     */
+    //Helper method keeps access asynchronous
+    private Set<String> getFruitKeySet(){
+        return sharedPref.getStringSet(
+                context.getString(R.string.preference_fruit_list),
+                new ArraySet<String>()
+        );
+    }
+    //
+    public void clearFruit(){
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.commit();
+    }
+
     //Finds the Fruit content
     @Nullable
     public List<FruitClass> loadFruitKeysFromMemory(){
-        if (fruit_key_set!=null){
+        Set<String> fruit_key_set = getFruitKeySet();
+        if (!fruit_key_set.isEmpty()){
             String[] fruit_key_list = fruit_key_set.toArray(new String[0]);
             //process each fruit by accessing its key
             //the key gives us a set of strings to be decoded into a constructer
@@ -50,18 +63,24 @@ public class ContentBroker {
             return new ArrayList<FruitClass>();
         }
     }
-    public void saveNewFruit(FruitClass newFruit){
+    public Set<String> saveNewFruit(FruitClass newFruit){
         //TODO: Safety check name collisions of the title field
         SharedPreferences.Editor editor = sharedPref.edit();
-        this.fruit_key_set.add(newFruit.getTitle());
-        editor.putStringSet(
-                context.getString(R.string.preference_fruit_list),
-                this.fruit_key_set
-        );//Add the new fruit to the keyset
-        editor.putString(
-                newFruit.getTitle(),
-                newFruit.toString()
-        );//add the new fruit to the dictionary
-        editor.commit();
+        Set<String> fruit_key_set = getFruitKeySet();
+        if(fruit_key_set.contains(newFruit.getTitle())){
+            //ERROR CASE "Collision"
+        }else{
+            fruit_key_set.add(newFruit.getTitle());
+            editor.putStringSet(
+                    context.getString(R.string.preference_fruit_list),
+                    fruit_key_set
+            );//Add the new fruit to the keyset
+            editor.putString(
+                    newFruit.getTitle(),
+                    newFruit.toString()
+            );//add the new fruit to the dictionary
+            editor.commit();
+
+        }return fruit_key_set;
     }
 }

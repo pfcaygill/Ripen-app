@@ -1,5 +1,7 @@
 package pfcaygill.ripen;
 
+import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,11 +17,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+implements Clear_All_Dialog.SimpleDialogListener{
 
 
     private SwipeRefreshLayout swipeContainer;
     private FruitAdapter adapter;
+    private ContentBroker broker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         //using a shared preference broker load the content that is needed to load
-        ContentBroker broker = new ContentBroker(this);//this is a context
+        broker = new ContentBroker(this);
          //build the adapter & attach the adapter to the recyclerview to populate the fruit
         adapter = new FruitAdapter(this, broker);
         rvFruit.setAdapter(adapter);
@@ -76,12 +80,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.new_fruit:
-               /* Toast create_toast = Toast.makeText(
-                        getApplicationContext(),//Context
-                        getApplicationContext().getString(R.string.create_fruit_toast),//text to be shown
-                        Toast.LENGTH_SHORT//duration
-                );
-                create_toast.show();*/
                 Intent intent = new Intent(this, Create_Fruit.class);
                 startActivity(intent);
 
@@ -94,8 +92,22 @@ public class MainActivity extends AppCompatActivity {
                 );
                 delete_toast.show();
                 return true;
+            case R.id.clear_all_fruit:
+                Clear_All_Dialog dialog = new Clear_All_Dialog();
+                dialog.show(getSupportFragmentManager(),"ClearAllDialog");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        broker.clearFruit();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();//not needed technically but for cleanliness sake
     }
 }

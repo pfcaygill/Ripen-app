@@ -51,9 +51,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
      * Reset each of the fruit durations
      * */
     public void refresh(){
-        for (int i=0;i<listFruits.size();i++){
-            listFruits.get(i).updateProgress();
-        }
+        listFruits = (ArrayList<FruitClass>)broker.loadFruitKeysFromMemory();
         notifyDataSetChanged();
     }
     /**

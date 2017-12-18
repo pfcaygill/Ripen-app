@@ -1,25 +1,11 @@
 package pfcaygill.ripen;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.util.ArraySet;
-import android.widget.Toast;
-
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.joda.time.Period;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by PFCaygill on 12/09/2017.
@@ -30,17 +16,17 @@ public class FruitClass {
 
     private String Title;
     private DateTime LastPicked;
-    private Duration Interval;
+    private Period Interval;
     private int Progress;
 
-    public FruitClass(String DataTitle,DateTime DataLast,Duration DataInterval){
+    public FruitClass(String DataTitle, DateTime DataLast, Period DataInterval){
         Title=DataTitle;
         LastPicked=DataLast;
         Interval= DataInterval;
         updateProgress();
     }
 
-    public Duration getInterval() {
+    public Period getInterval() {
         return Interval;
     }
 
@@ -58,15 +44,15 @@ public class FruitClass {
         this.Progress = calculateProgress(this.LastPicked,this.Interval);
     }
     //static method to calculate the progress of ripening
-    public static int calculateProgress(DateTime lastPicked,Duration interval){
+    public static int calculateProgress(DateTime lastPicked, Period interval){
         DateTime current = DateTime.now();// needed for manual calculation
         Duration timeRipening = new Duration(lastPicked,current);
-        if( timeRipening.isLongerThan(interval)){
+        if( timeRipening.isLongerThan(interval.toStandardDuration())){
             return 100;
         }else{
             Double ratio =//using double fixes the forced use of longs
                     (10.0*timeRipening.getStandardHours())/
-                            (10.0*interval.getStandardHours());
+                            (10.0*interval.getHours());
             return (int)(100*ratio);
         }
     }
@@ -77,9 +63,10 @@ public class FruitClass {
         String[] data =  fromString.split(";");
         Title = data[0];
         LastPicked= DateTime.parse(data[1]);
-        Interval= Duration.parse(data[2]);
+        Interval= Period.parse(data[2]);
         updateProgress();
     }
+    @Override
     public String toString(){
         return Title +";"+
         LastPicked.toString() +";"+
@@ -93,7 +80,7 @@ public class FruitClass {
     public static List<FruitClass> loadFruitElements(){
         ArrayList<FruitClass> fruitFromMemory = new ArrayList<FruitClass>();
         //Duration should be one standard day
-        Duration testDuration = Duration.standardDays(1);
+        Period testDuration = new Period(0,0,0,1,0,0,0,0);
 
         fruitFromMemory.add(new FruitClass(
                 "Test_Fruit",

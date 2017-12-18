@@ -7,5 +7,8 @@
     <item android:id="@+id/delete_fruit"
         android:title="@string/delete_fruit"
         />
+    <item android:id="@+id/clear_all_fruit"
+        android:title="@string/clear_all_fruit"
+        />
 
 </menu>

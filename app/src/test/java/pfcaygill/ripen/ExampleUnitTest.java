@@ -18,6 +18,36 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
-
+    private final String[] units = new String[]{
+            "Hours",
+            "Days",
+            "Weeks",
+            "Months",
+            "Years",
+    };
+    public void testDurationCalculation(
+            String unit,
+            int length,
+            String[] slist,
+            Duration dur
+    ){
+        assertEquals(
+                dur.toString(),
+                Create_Fruit.calculateJodaValue(
+                        unit,length,slist
+                ).toString()
+        );
+    }
+    @Test
+    public void jodaValueHour(){
+        DateTime start = new DateTime(2000,12,25,11,0);
+        DateTime end = new DateTime(2000,12,25,12,0);
+        testDurationCalculation(
+                "Hours",
+                1,
+                units,
+                new Duration(start,end)
+        );
+    }
 
 }
